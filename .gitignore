@@ -1,0 +1,14 @@
+# IntelliJ Files
+*.iml
+/.idea/
+# Gradle files
+.gradle/
+build/
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+release/
