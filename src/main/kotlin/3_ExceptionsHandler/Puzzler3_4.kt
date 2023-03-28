@@ -2,7 +2,7 @@ package `3_ExceptionsHandler3_1`
 
 import kotlinx.coroutines.*
 
-// Puzzler 3.1: Coroutine Exception Handling
+// Puzzler 3.1: Coroutine Exception Handling with a SupervisorJob
 // Question: What is the output of this code snippet, and why?
 
 fun main() = runBlocking {
@@ -10,7 +10,9 @@ fun main() = runBlocking {
         println("Caught $exception")
     }
 
-    val job = GlobalScope.launch(exceptionHandler) {
+    val scope = CoroutineScope(Job())
+
+    val job = scope.launch(exceptionHandler + SupervisorJob()) {
         launch {
             println("Coroutine 1 starts")
             delay(500)
