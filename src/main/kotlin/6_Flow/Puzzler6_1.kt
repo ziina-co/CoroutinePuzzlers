@@ -1,22 +1,27 @@
 package `6_Flow`
 
-// Puzzler 6.1: Flow Collection
-// Question: What is the output of this code snippet, and why?
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlin.time.Duration.Companion.milliseconds
+// Puzzler 6.1: Flow Exception Handling
+suspend fun performRequest(request: Int): String {
+    delay(100)
+    if (request == 2) throw RuntimeException("Error on request $request")
+    return "Result for request $request"
+}
 
-suspend fun numberFlow(): Flow<Int> = flow {
+fun requestFlow() = flow {
     for (i in 1..3) {
-        delay(500)
         emit(i)
     }
 }
 
 fun main() = runBlocking {
-    val startTime = System.currentTimeMillis()
-    numberFlow().collect { value ->
-        println("Collected $value at ${(System.currentTimeMillis() - startTime).milliseconds}")
-    }
+    requestFlow()
+        .map { request -> performRequest(request) }
+        .catch { e -> emit("Caught error: ${e.localizedMessage}") }
+        .collect { response -> println(response) }
 }
