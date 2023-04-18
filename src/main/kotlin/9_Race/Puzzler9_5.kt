@@ -1,15 +1,14 @@
-package `9_Race9_4_Mutex`
+package `9_Race9_5`
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 data class Counter(var count: Int = 0)
 
 val counter = Counter()
 val mutex = Mutex()
 
-suspend fun increment() = mutex.withLock {
+fun increment() {
     counter.count++
 }
 
@@ -28,11 +27,13 @@ fun main() = runBlocking {
     }
 
     repeat(1_000) {
+        mutex.lock()
         jobs += launch(customDispatcher) {
             repeat(1_000) {
                 increment()
             }
         }
+        mutex.unlock()
     }
 
     joinAll(*jobs.toTypedArray())

@@ -1,15 +1,19 @@
-package `9_Race9_4_Mutex`
+package `9_Race9_5a`
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlin.random.Random
 
 data class Counter(var count: Int = 0)
+
+private val Int.spaces: String
+    get() = " ".repeat(this)
 
 val counter = Counter()
 val mutex = Mutex()
 
-suspend fun increment() = mutex.withLock {
+suspend fun increment() {
+    delay(Random.nextLong(0, 2))
     counter.count++
 }
 
@@ -30,7 +34,9 @@ fun main() = runBlocking {
     repeat(1_000) {
         jobs += launch(customDispatcher) {
             repeat(1_000) {
+                mutex.lock()
                 increment()
+                mutex.unlock()
             }
         }
     }
