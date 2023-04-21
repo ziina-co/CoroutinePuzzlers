@@ -1,12 +1,10 @@
-package `9_Race9_5`
+package `9_Race9_2c`
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Mutex
 
 data class Counter(var count: Int = 0)
 
 val counter = Counter()
-val mutex = Mutex()
 
 fun increment() {
     counter.count++
@@ -15,29 +13,21 @@ fun increment() {
 fun main() = runBlocking {
     val jobs = mutableListOf<Job>()
     val customDispatcher = newFixedThreadPoolContext(
-        nThreads = 100,
+        nThreads = 2,
         name = "CustomDispatcher"
     )
 
-    val counterJob = launch {
-        while (isActive) {
-            delay(1)
-            print("Counter: ${counter.count}\r")
-        }
-    }
-
     repeat(1_000) {
-        mutex.lock()
         jobs += launch(customDispatcher) {
             repeat(1_000) {
-                increment()
+                synchronized(counter) {
+                    increment()
+                }
             }
         }
-        mutex.unlock()
     }
 
     joinAll(*jobs.toTypedArray())
-    counterJob.cancel()
 
     println("Final count: ${
         counter.count.toString()
