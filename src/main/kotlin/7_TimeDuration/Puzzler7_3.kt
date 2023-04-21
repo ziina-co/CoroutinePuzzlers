@@ -1,16 +1,18 @@
-package `7_Timing`
+package `7_TimeDuration`
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import utils.now
+import utils.passed
 
 fun main(): Unit = runBlocking {
-    val startTime = System.currentTimeMillis()
+    val time = now()
 
     launch {
         repeat(10) {
             delay(100)
-            println("$it: ${System.currentTimeMillis() - startTime}")
+            println("$it: ${time.passed}")
         }
     }
 }

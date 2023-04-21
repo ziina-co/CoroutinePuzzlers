@@ -1,8 +1,13 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package `9_Race9_2a`
 
 import kotlinx.coroutines.*
-
-data class Counter(var count: Int = 0)
+import utils.models.Counter
+import utils.now
+import utils.passed
+import utils.threadsScheduler
+import kotlin.time.Duration.Companion.seconds
 
 val counter = Counter()
 
@@ -11,11 +16,9 @@ fun increment() {
 }
 
 fun main() = runBlocking {
+    val time = now()
     val jobs = mutableListOf<Job>()
-    val customDispatcher = newFixedThreadPoolContext(
-        nThreads = 2,
-        name = "CustomDispatcher"
-    )
+    val customDispatcher = 2.threadsScheduler
 
     repeat(1_000) {
         synchronized(this) {
@@ -27,14 +30,9 @@ fun main() = runBlocking {
         }
     }
 
-    joinAll(*jobs.toTypedArray())
+    withTimeout(10.seconds) {
+        joinAll(*jobs.toTypedArray())
+    }
 
-    println("Final count: ${
-        counter.count.toString()
-            .reversed()
-            .chunked(3)
-            .map { it.reversed() }
-            .reduceRight { s, acc -> "${acc}_${s}" }
-    }"
-    )
+    println("Final count: ${counter.pretty} in ${time.passed}")
 }

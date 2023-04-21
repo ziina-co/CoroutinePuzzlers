@@ -5,23 +5,26 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import utils.now
+import utils.passed
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
-
-fun Flow<Item>.timed(delay: Long): Flow<Pair<Item, Long>> = flow {
-    var startTime = 0L
+fun Flow<Item>.timed(delay: Duration): Flow<Pair<Item, Duration>> = flow {
+    var time: Duration = Duration.ZERO
 
     buffer(1, BufferOverflow.DROP_OLDEST).collect { item ->
-        if (startTime == 0L) {
-            startTime = System.currentTimeMillis()
+        if (time == Duration.ZERO) {
+            time = now()
         }
 
-        emit(item to (System.currentTimeMillis() - startTime))
+        emit(item to (time.passed))
         delay(delay)
     }
 }
 
 fun main(): Unit = runBlocking {
-    val sharedFlow = itemFlow()
+    val sharedFlow: SharedFlow<Item> = itemFlow()
         .shareIn(this, SharingStarted.Eagerly, 0)
     launch {
         sharedFlow.collect {
@@ -31,7 +34,7 @@ fun main(): Unit = runBlocking {
 
     launch {
         sharedFlow
-            .timed(1000)
+            .timed(1000.milliseconds)
             .collect {
                 println(it)
             }

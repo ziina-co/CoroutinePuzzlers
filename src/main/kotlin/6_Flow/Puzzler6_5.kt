@@ -1,12 +1,11 @@
 package `6_Flow`
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import utils.now
+import utils.passed
 
 data class Item(val id: Int)
 
@@ -17,8 +16,9 @@ fun itemFlow(): Flow<Item> = flow {
     }
 }
 
+@OptIn(FlowPreview::class)
 fun main() = runBlocking {
-    val startTime = System.currentTimeMillis()
+    val time = now()
     val result = mutableListOf<Item>()
     itemFlow().flatMapMerge { item ->
         flow {
@@ -30,8 +30,7 @@ fun main() = runBlocking {
     }.collect { item ->
         result.add(item)
     }
-    val endTime = System.currentTimeMillis()
 
     println("Result: $result")
-    println("Time taken: ${endTime - startTime} ms")
+    println("Time taken: ${time.passed}")
 }

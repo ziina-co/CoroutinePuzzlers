@@ -1,10 +1,15 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package `9_Race9_4_Mutex`
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-
-data class Counter(var count: Int = 0)
+import utils.models.Counter
+import utils.now
+import utils.passed
+import utils.threadsScheduler
+import kotlin.time.Duration.Companion.seconds
 
 val counter = Counter()
 val mutex = Mutex()
@@ -14,18 +19,9 @@ suspend fun increment() = mutex.withLock {
 }
 
 fun main() = runBlocking {
+    val time = now()
     val jobs = mutableListOf<Job>()
-    val customDispatcher = newFixedThreadPoolContext(
-        nThreads = 100,
-        name = "CustomDispatcher"
-    )
-
-    val counterJob = launch {
-        while (isActive) {
-            delay(1)
-            print("Counter: ${counter.count}\r")
-        }
-    }
+    val customDispatcher = 2.threadsScheduler
 
     repeat(1_000) {
         jobs += launch(customDispatcher) {
@@ -35,15 +31,9 @@ fun main() = runBlocking {
         }
     }
 
-    joinAll(*jobs.toTypedArray())
-    counterJob.cancel()
+    withTimeout(10.seconds) {
+        joinAll(*jobs.toTypedArray())
+    }
 
-    println("Final count: ${
-        counter.count.toString()
-            .reversed()
-            .chunked(3)
-            .map { it.reversed() }
-            .reduceRight { s, acc -> "${acc}_${s}" }
-    }"
-    )
+    println("Final count: ${counter.pretty} in ${time.passed}")
 }
