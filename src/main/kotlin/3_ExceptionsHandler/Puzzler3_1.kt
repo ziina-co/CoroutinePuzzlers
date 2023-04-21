@@ -5,6 +5,7 @@ import kotlinx.coroutines.*
 // Puzzler 3.1: Coroutine Exception Handling
 // Question: What is the output of this code snippet, and why?
 
+@OptIn(DelicateCoroutinesApi::class)
 fun main() = runBlocking {
     val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         println("Caught $exception")
@@ -24,5 +25,6 @@ fun main() = runBlocking {
             println("🍬Coroutine 2 completes successfully")
         }
     }
+    
     job.join()
 }

@@ -1,10 +1,14 @@
+@file:OptIn(DelicateCoroutinesApi::class, DelicateCoroutinesApi::class)
+
 package `8_Schedulers`
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.coroutines.runBlocking
-import kotlin.system.measureTimeMillis
+import utils.now
+import utils.passed
+import utils.threadsScheduler
 
 private suspend fun heavyComputation(taskId: Int): Int {
     println("Task $taskId started")
@@ -14,26 +18,23 @@ private suspend fun heavyComputation(taskId: Int): Int {
 }
 
 fun main() = runBlocking {
-    val customDispatcher = newFixedThreadPoolContext(
-        nThreads = 2,
-        name = "CustomDispatcher"
-    )
+    val customDispatcher = 2.threadsScheduler
 
-    val time = measureTimeMillis {
-        val task1 = async(customDispatcher) {
-            heavyComputation(1)
-        }
+    val time = now()
 
-        val task2 = async(customDispatcher) {
-            heavyComputation(2)
-        }
-
-        val task3 = async(customDispatcher) {
-            heavyComputation(3)
-        }
-
-        println("Result: ${task1.await() + task2.await() + task3.await()}")
+    val task1 = async(customDispatcher) {
+        heavyComputation(taskId = 1)
     }
 
-    println("Total time: $time ms")
+    val task2 = async(customDispatcher) {
+        heavyComputation(taskId = 2)
+    }
+
+    val task3 = async(customDispatcher) {
+        heavyComputation(taskId = 3)
+    }
+
+    println("Result: ${task1.await() + task2.await() + task3.await()}")
+
+    println("Total time: ${time.passed}")
 }

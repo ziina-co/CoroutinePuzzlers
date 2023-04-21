@@ -2,12 +2,11 @@ package `9_Race9_5a`
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import utils.models.Counter
+import utils.threadsScheduler
 import kotlin.random.Random
-
-data class Counter(var count: Int = 0)
-
-private val Int.spaces: String
-    get() = " ".repeat(this)
+import kotlin.time.Duration.Companion.seconds
 
 val counter = Counter()
 val mutex = Mutex()
@@ -19,37 +18,21 @@ suspend fun increment() {
 
 fun main() = runBlocking {
     val jobs = mutableListOf<Job>()
-    val customDispatcher = newFixedThreadPoolContext(
-        nThreads = 100,
-        name = "CustomDispatcher"
-    )
-
-    val counterJob = launch {
-        while (isActive) {
-            delay(1)
-            print("Counter: ${counter.count}\r")
-        }
-    }
+    val customDispatcher = 2.threadsScheduler
 
     repeat(1_000) {
         jobs += launch(customDispatcher) {
             repeat(1_000) {
-                mutex.lock()
-                increment()
-                mutex.unlock()
+                mutex.withLock {
+                    increment()
+                }
             }
         }
     }
 
-    joinAll(*jobs.toTypedArray())
-    counterJob.cancel()
+    withTimeout(10.seconds) {
+        joinAll(*jobs.toTypedArray())
+    }
 
-    println("Final count: ${
-        counter.count.toString()
-            .reversed()
-            .chunked(3)
-            .map { it.reversed() }
-            .reduceRight { s, acc -> "${acc}_${s}" }
-    }"
-    )
+    println("Final count: ${counter.pretty}")
 }
