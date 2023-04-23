@@ -9,16 +9,16 @@ fun main(): Unit = runBlocking {
     val scope = CoroutineScope(SupervisorJob())
 
     val job1 = scope.launch {
-        println("Coroutine 1 starts")
+        print("Coroutine 1 starts")
         delay(500)
-        println("Coroutine 1 throws an exception")
+        print("Coroutine 1 throws an exception")
         throw RuntimeException("Coroutine 1 exception")
     }
 
     val job2 = scope.launch {
-        println("Coroutine 2 starts")
+        print("Coroutine 2 starts")
         delay(1000)
-        println("🍬Coroutine 2 completes successfully")
+        print("🍬Coroutine 2 completes successfully")
     }
 
     joinAll(job1, job2)

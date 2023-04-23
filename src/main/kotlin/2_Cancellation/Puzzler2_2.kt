@@ -8,17 +8,39 @@ fun main() = runBlocking {
     with(CoroutineScope(coroutineContext + supervisor)) {
         val child = launch {
             try {
-                println("Child is running")
+                print("A")
                 delay(Long.MAX_VALUE)
             } finally {
-                println("Child is cancelled")
+                print("B")
             }
         }
 
         delay(1000)
-        println("Cancelling the supervisor")
+        print("C")
         supervisor.cancel()
     }
 
-    println("Parent is not cancelled")
+    print("D")
 }
+
+/*
+gitGraph
+    commit id: "start"
+    commit id: "launch child"
+    branch child
+    checkout main
+    commit id: "delay 1000"
+    checkout child
+    commit id: "print A" tag: "A" type:HIGHLIGHT
+    commit id: "delay ♾️"
+    checkout main
+    commit id: "print C" tag: "C" type:HIGHLIGHT
+    commit id: "supervisor.cancel()"
+    commit id: "print D" tag: "D" type:HIGHLIGHT
+    checkout child
+    commit id: "CancelExcptn💥"
+    commit id: "print B" tag: "B" type:HIGHLIGHT
+    checkout main
+    commit id: "end"
+
+ */

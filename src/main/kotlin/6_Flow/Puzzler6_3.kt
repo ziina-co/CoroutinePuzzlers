@@ -28,6 +28,6 @@ fun main() = runBlocking {
         result.add(item)
     }
 
-    println("Result: $result")
-    println("Time taken: ${time.passed}")
+    print("Result: $result")
+    print("Time taken: ${time.passed}")
 }

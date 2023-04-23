@@ -18,7 +18,7 @@ fun main(): Unit = runBlocking {
     withTimeoutOrNull(250) {
         numberFlow().collect {
             delay(50)
-            println(it)
+            print(it)
         }
     }
 }

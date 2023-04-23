@@ -7,7 +7,7 @@ import kotlinx.coroutines.*
 
 fun main() = runBlocking {
     val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        println("Caught $exception")
+        print("Caught $exception")
     }
 
     val scope = CoroutineScope(Job())
@@ -15,16 +15,16 @@ fun main() = runBlocking {
     val job = scope.launch(exceptionHandler) {
         supervisorScope {
             launch {
-                println("Coroutine 1 starts")
+                print("Coroutine 1 starts")
                 delay(500)
-                println("Coroutine 1 throws an exception")
+                print("Coroutine 1 throws an exception")
                 throw RuntimeException("Coroutine 1 exception")
             }
 
             launch {
-                println("Coroutine 2 starts")
+                print("Coroutine 2 starts")
                 delay(1000)
-                println("🍬Coroutine 2 completes successfully")
+                print("🍬Coroutine 2 completes successfully")
             }
         }
     }
