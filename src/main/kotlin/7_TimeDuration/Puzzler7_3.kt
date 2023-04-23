@@ -12,7 +12,7 @@ fun main(): Unit = runBlocking {
     launch {
         repeat(10) {
             delay(100)
-            println("$it: ${time.passed}")
+            print("$it: ${time.passed}")
         }
     }
 }

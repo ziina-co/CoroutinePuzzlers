@@ -1,24 +1,40 @@
 package `1_Scope1_1`
 
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-// Puzzler 1.1: Coroutine Scope Confusion
-// Question: What is the order of the outputs, and why?
 fun main(): Unit = runBlocking {
-    launch {
+    val JobA = launch {
         delay(500)
-        println("Coroutine 1")
+        print("A")
     }
 
-    coroutineScope {
-        launch {
-            delay(1000)
-            println("Coroutine 2")
-        }
+    val JobB = launch {
+        delay(1000)
+        print("B")
     }
 
-    println("End of main")
+    print("C")
 }
+
+
+/*
+gitGraph
+    commit id: "start"
+    commit id: "launch JobA"
+    branch JobA
+    commit id: "delay 500ms"
+    checkout main
+    commit id: "launch JobB"
+    branch JobB
+    commit id: "delay 1000ms"
+    checkout main
+    commit id: "print C" tag: "C" type:HIGHLIGHT
+    checkout JobA
+    commit id: "print A" tag: "A" type:HIGHLIGHT
+    checkout JobB
+    commit id: "print B" tag: "B" type:HIGHLIGHT
+    checkout main
+    commit id: "end"
+ */

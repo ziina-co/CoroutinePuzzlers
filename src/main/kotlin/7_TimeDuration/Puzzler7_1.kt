@@ -12,20 +12,20 @@ fun main(): Unit = runBlocking {
     val time = now()
 
     launch {
-        println("A: ${time.passed}")
+        print("A: ${time.passed}")
         delay(1000L)
-        println("B: ${time.passed}")
+        print("B: ${time.passed}")
     }
 
     launch {
-        println("C: ${time.passed}")
+        print("C: ${time.passed}")
         sleep(1000L)
-        println("D: ${time.passed}")
+        print("D: ${time.passed}")
     }
 
     launch {
-        println("E: ${time.passed}")
+        print("E: ${time.passed}")
         delay(2000L)
-        println("F: ${time.passed}")
+        print("F: ${time.passed}")
     }
 }

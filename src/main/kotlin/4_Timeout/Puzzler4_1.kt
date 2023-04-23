@@ -9,9 +9,9 @@ import kotlinx.coroutines.*
 fun main() = runBlocking {
     withTimeoutOrNull(1300L) {
         repeat(5) { i ->
-            println("Coroutine: I'm working on step $i")
+            print("Coroutine: I'm working on step $i")
             delay(500)
         }
     }
-    println("Main: Coroutine is done")
+    print("Main: Coroutine is done")
 }

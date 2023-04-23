@@ -23,5 +23,5 @@ fun main() = runBlocking {
     requestFlow()
         .map { request -> performRequest(request) }
         .catch { e -> emit("Caught error: ${e.localizedMessage}") }
-        .collect { response -> println(response) }
+        .collect { response -> print(response) }
 }

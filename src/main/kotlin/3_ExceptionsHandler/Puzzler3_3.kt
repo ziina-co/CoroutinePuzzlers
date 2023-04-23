@@ -5,6 +5,7 @@ import kotlinx.coroutines.*
 fun main() = runBlocking {
     val exceptionHandler = CoroutineExceptionHandler { _, _ -> print("💥") }
     val scope = CoroutineScope(SupervisorJob())
+
     val job = scope.launch(exceptionHandler) {
         val child1 = launch {
             print("A")

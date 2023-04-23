@@ -11,9 +11,9 @@ import utils.passed
 import utils.threadsScheduler
 
 private suspend fun heavyComputation(taskId: Int): Int {
-    println("Task $taskId started")
+    print("Task $taskId started")
     delay(1000L)
-    println("Task $taskId completed")
+    print("Task $taskId completed")
     return taskId
 }
 
@@ -34,7 +34,7 @@ fun main() = runBlocking {
         heavyComputation(taskId = 3)
     }
 
-    println("Result: ${task1.await() + task2.await() + task3.await()}")
+    print("Result: ${task1.await() + task2.await() + task3.await()}")
 
-    println("Total time: ${time.passed}")
+    print("Total time: ${time.passed}")
 }

@@ -19,11 +19,11 @@ fun main() = runBlocking {
     val deferred1 = async { performTask(1) }
     val deferred2 = async { performTask(2) }
 
-    println("Waiting for results")
+    print("Waiting for results")
     val result1 = deferred1.await()
     val result2 = deferred2.await()
 
-    println(
+    print(
         "Results: $result1, $result2.\n" +
                 "⌛️: ${(time.passed)}"
     )

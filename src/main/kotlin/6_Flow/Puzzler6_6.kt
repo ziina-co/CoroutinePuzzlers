@@ -28,7 +28,7 @@ fun main(): Unit = runBlocking {
         .shareIn(this, SharingStarted.Eagerly, 0)
     launch {
         sharedFlow.collect {
-            println(it)
+            print(it)
         }
     }
 
@@ -36,7 +36,7 @@ fun main(): Unit = runBlocking {
         sharedFlow
             .timed(1000.milliseconds)
             .collect {
-                println(it)
+                print(it)
             }
     }
 }

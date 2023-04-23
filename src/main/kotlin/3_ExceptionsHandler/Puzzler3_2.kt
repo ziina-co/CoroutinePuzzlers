@@ -32,12 +32,12 @@ gitGraph
     branch Job
     commit id: "launch child1"
     branch Child1
+    commit id: "launch child2"
+    branch Child2
     checkout Child1
     commit id: "print A" tag: "A" type:HIGHLIGHT
     commit id: "delay 500"
-    checkout Job
-    commit id: "launch child2"
-    branch Child2
+    checkout Child2
     commit id: "print D" tag: "D" type:HIGHLIGHT
     commit id: "delay 1000"
     checkout Child1
@@ -50,5 +50,4 @@ gitGraph
     checkout main
     merge Job id: "job.join()"
     commit id: "end"
-
  */

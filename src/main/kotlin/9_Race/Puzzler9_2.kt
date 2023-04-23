@@ -38,5 +38,5 @@ fun main() = runBlocking {
         joinAll(*jobs.toTypedArray())
     }
 
-    println("Final count: ${counter.pretty} in ${time.passed}")
+    print("Final count: ${counter.pretty} in ${time.passed}")
 }
