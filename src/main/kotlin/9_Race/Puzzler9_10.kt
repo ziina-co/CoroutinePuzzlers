@@ -33,6 +33,13 @@ fun main() = runBlocking {
     withTimeout(10.seconds) {
         joinAll(*jobs.toTypedArray())
     }
-
     print("Final count: ${counter.pretty}")
+
 }
+
+/* options
+1) 1_000_000
+2) 100_000..999_999
+3) < 100_000
+4) crash
+ */
