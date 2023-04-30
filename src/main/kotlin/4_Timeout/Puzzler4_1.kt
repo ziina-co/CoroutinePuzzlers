@@ -1,17 +1,24 @@
 package `4_Timeout`
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 
-// Puzzler 4.1: Coroutine Timeouts
-// Question: What is the output of this code snippet, and why?
-
-// не слишком ли просто? 👍
 fun main() = runBlocking {
-    withTimeoutOrNull(1300L) {
+    withTimeout(1300L) {
         repeat(5) { i ->
-            println("Coroutine: I'm working on step $i")
+            print("$i")
             delay(500)
         }
     }
-    println("Main: Coroutine is done")
+
+    print("✅")
 }
+
+/*
+options:
+a) 012 Crash
+b) 012✅
+c) 0123✅
+d) 0123 Crash
+ */

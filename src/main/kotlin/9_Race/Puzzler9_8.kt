@@ -1,8 +1,10 @@
 @file:OptIn(DelicateCoroutinesApi::class)
 
-package `9_Race9_2c`
+package `9_Race9_4_Mutex`
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import utils.models.Counter
 import utils.now
 import utils.passed
@@ -10,8 +12,9 @@ import utils.threadsScheduler
 import kotlin.time.Duration.Companion.seconds
 
 val counter = Counter()
+val mutex = Mutex()
 
-fun increment() {
+suspend fun increment() = mutex.withLock {
     counter.count++
 }
 
@@ -23,9 +26,7 @@ fun main() = runBlocking {
     repeat(1_000) {
         jobs += launch(customDispatcher) {
             repeat(1_000) {
-                synchronized(counter) {
-                    increment()
-                }
+                increment()
             }
         }
     }
@@ -36,6 +37,7 @@ fun main() = runBlocking {
 
     print("Final count: ${counter.pretty} in ${time.passed}")
 }
+
 /* options
 1) 1_000_000
 2) 100_000..999_999

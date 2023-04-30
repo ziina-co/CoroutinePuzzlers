@@ -1,19 +1,48 @@
-package `1_Scope1_2`
+package `1_Scope1_1`
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-
-// Puzzler 1.2: Coroutine Context Switching
-// Question: What is the output of this code snippet, and why?
 fun main(): Unit = runBlocking {
-    val context1 = newSingleThreadContext("Context1")
-    val context2 = newSingleThreadContext("Context2")
-
-    launch(context1) {
-        println("Starting in context1: ${Thread.currentThread().name}")
-        withContext(context2) {
-            println("Switched to context2: ${Thread.currentThread().name}")
-        }
-        println("Back to context1: ${Thread.currentThread().name}")
+    val JobA = launch {
+        delay(500)
+        print("A")
     }
+
+    coroutineScope {
+        val JobB = launch {
+            delay(1000)
+            print("B")
+        }
+    }
+
+    print("C")
 }
+
+/*
+gitGraph
+    commit id: "start"
+    commit id: "launch JobA"
+    branch JobA
+    commit id: "delay 500ms"
+    checkout main
+    commit id: "coroutineScope"
+    checkout JobA
+    commit id: "print A" tag: "A" type:HIGHLIGHT
+    checkout main
+    branch coroutineScope
+    commit id: "launch JobB"
+    branch JobB
+    commit id: "delay 1000ms"
+    commit id: "print B" tag: "B" type:HIGHLIGHT
+    checkout coroutineScope
+    merge JobB
+    checkout main
+    merge coroutineScope
+    commit id: "print C" tag: "C" type:HIGHLIGHT
+    checkout JobB
+    checkout main
+    commit id: "end"
+ */

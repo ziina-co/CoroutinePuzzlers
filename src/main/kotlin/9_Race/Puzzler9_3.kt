@@ -1,6 +1,6 @@
 @file:OptIn(DelicateCoroutinesApi::class)
 
-package `9_Race9_2c`
+package `9_Race9_2a`
 
 import kotlinx.coroutines.*
 import utils.models.Counter
@@ -21,9 +21,9 @@ fun main() = runBlocking {
     val customDispatcher = 2.threadsScheduler
 
     repeat(1_000) {
-        jobs += launch(customDispatcher) {
-            repeat(1_000) {
-                synchronized(counter) {
+        synchronized(this) {
+            jobs += launch(customDispatcher) {
+                repeat(1_000) {
                     increment()
                 }
             }

@@ -23,10 +23,10 @@ fun main() = runBlocking {
         } else {
             false
         }
-    }.catch { t -> println("Caught exception: $t") }.collect {
+    }.catch { t -> print("Caught exception: $t") }.collect {
         result.add(it)
     }
 
-    println("Result: $result")
-    println("Retry count: $retryCount")
+    print("Result: $result")
+    print("Retry count: $retryCount")
 }
