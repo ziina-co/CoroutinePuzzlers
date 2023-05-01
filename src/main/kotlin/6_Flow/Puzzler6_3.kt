@@ -11,7 +11,7 @@ data class Item(val id: Int)
 fun itemFlow(): Flow<Item> = flow {
     (1..5).forEach { id ->
         emit(Item(id))
-        delay(50)
+        delay(1000)
     }
 }
 
@@ -19,8 +19,8 @@ fun main() = runBlocking {
     val startTime = System.currentTimeMillis()
     val result = mutableListOf<Item>()
     itemFlow().flowOn(Dispatchers.IO).map { item ->
-        delay(100)
-        Item(item.id * 2)
+        delay(1000)
+        Item(item.id)
     }.flowOn(Dispatchers.Default).collect { item ->
         result.add(item)
     }
