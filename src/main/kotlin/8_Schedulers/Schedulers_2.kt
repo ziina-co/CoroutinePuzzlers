@@ -1,8 +1,5 @@
-@file:OptIn(DelicateCoroutinesApi::class, DelicateCoroutinesApi::class)
-
 package `8_Schedulers`
 
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import utils.now
