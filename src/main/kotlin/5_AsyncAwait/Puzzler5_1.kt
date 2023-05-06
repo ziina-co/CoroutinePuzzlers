@@ -6,8 +6,6 @@ import kotlinx.coroutines.runBlocking
 import utils.now
 import utils.passed
 
-// Puzzler 5.1: Async and Await
-// Question: What is the output of this code snippet, and why?
 suspend fun performTask(id: Int): Int {
     delay(1000)
     return id * 2

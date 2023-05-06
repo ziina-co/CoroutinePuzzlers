@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 
-// Puzzler 6.1_1: Flow Exception Handling
 suspend fun performRequest(request: Int): String {
     delay(100)
     if (request == 2) throw RuntimeException("Error on request $request")
