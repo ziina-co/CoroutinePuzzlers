@@ -6,13 +6,25 @@ import utils.now
 import utils.passed
 import java.lang.Thread.sleep
 
-fun main(): Unit = runBlocking {
+fun main() {
     val time = now()
 
-    repeat(10) {
-        launch {
-            sleep(100)
-            print("$it: ${time.passed}")
+    runBlocking {
+        repeat(10) {
+            launch {
+                sleep(100)
+                print("$it: ${time.passed}, ")
+            }
         }
     }
+
+    println("\nTotal: ${time.passed}")
 }
+
+/*
+Total time?
+a) ~1s
+b) Crash
+c) ~100ms
+d) ♾️
+ */

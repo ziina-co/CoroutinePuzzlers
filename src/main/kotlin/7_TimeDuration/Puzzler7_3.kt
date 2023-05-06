@@ -6,13 +6,25 @@ import kotlinx.coroutines.runBlocking
 import utils.now
 import utils.passed
 
-fun main(): Unit = runBlocking {
+fun main() {
     val time = now()
 
-    launch {
-        repeat(10) {
-            delay(100)
-            print("$it: ${time.passed}")
+    runBlocking {
+        launch {
+            repeat(10) {
+                delay(100)
+                print("$it: ${time.passed} 👉")
+            }
         }
     }
+
+    println("\nTotal: ${time.passed}")
 }
+
+/*
+Total time?
+a) ~1s
+b) Crash
+c) ~100ms
+d) ♾️
+ */
