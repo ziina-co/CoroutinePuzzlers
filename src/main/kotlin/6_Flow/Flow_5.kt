@@ -13,7 +13,7 @@ import kotlin.time.Duration.Companion.milliseconds
 fun Flow<Item>.timed(delay: Duration): Flow<Pair<Item, Duration>> = flow {
     var time: Duration = Duration.ZERO
 
-    buffer(1, BufferOverflow.DROP_OLDEST).collect { item ->
+    buffer(1, ).collect { item ->
         if (time == Duration.ZERO) {
             time = now()
         }
@@ -24,10 +24,10 @@ fun Flow<Item>.timed(delay: Duration): Flow<Pair<Item, Duration>> = flow {
 }
 
 fun main(): Unit = runBlocking {
-    val sharedFlow = itemFlow().shareIn(this, SharingStarted.Eagerly, 0)
+    val sharedFlow = itemFlow().shareIn(this, SharingStarted.Lazily, 0)
     launch {
         sharedFlow.collect {
-            print(it)
+            println(it)
         }
     }
 
@@ -35,7 +35,7 @@ fun main(): Unit = runBlocking {
         sharedFlow
             .timed(1000.milliseconds)
             .collect {
-                print(it)
+                println(it)
             }
     }
 }

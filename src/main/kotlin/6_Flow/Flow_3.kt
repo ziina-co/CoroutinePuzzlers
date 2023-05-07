@@ -24,7 +24,7 @@ fun main() = runBlocking {
     val result = mutableListOf<Item>()
 
     itemFlow().flowOn(Dispatchers.IO).map { item ->
-        delay(1000)
+        delay(500)
         Item(item.id)
     }.flowOn(Dispatchers.Default).collect { item ->
         result.add(item)

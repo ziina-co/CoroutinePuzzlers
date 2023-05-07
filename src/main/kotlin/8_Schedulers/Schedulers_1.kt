@@ -33,7 +33,7 @@ fun main() = runBlocking {
         heavyComputation(taskId = 3)
     }
 
-    print("Result: ${task1.await() + task2.await() + task3.await()}")
+    println("Result: ${task1.await() + task2.await() + task3.await()}")
 
-    print("Total time: ${time.passed}")
+    println("Total time: ${time.passed}")
 }
