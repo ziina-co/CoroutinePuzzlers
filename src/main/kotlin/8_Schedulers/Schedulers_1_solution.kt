@@ -7,7 +7,6 @@ import utils.now
 import utils.passed
 import utils.threadsScheduler
 import java.lang.Thread.sleep
-import kotlin.system.measureTimeMillis
 
 private fun heavyComputation(taskId: Int): Int {
     print("Task $taskId started")
