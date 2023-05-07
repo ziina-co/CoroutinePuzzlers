@@ -1,15 +1,14 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package `8_Schedulers`
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import utils.now
 import utils.passed
 import utils.threadsScheduler
 import java.lang.Thread.sleep
+import kotlin.system.measureTimeMillis
 
-/**
- * Schedulers 2
- */
 private fun heavyComputation(taskId: Int): Int {
     print("Task $taskId started")
     sleep(1000L)
@@ -18,20 +17,19 @@ private fun heavyComputation(taskId: Int): Int {
 }
 
 fun main() = runBlocking {
-    val customDispatcher = 2.threadsScheduler
-
+    val customDispatcher = 1.threadsScheduler
     val time = now()
 
     val task1 = async(customDispatcher) {
-        heavyComputation(1)
+        heavyComputation(taskId = 1)
     }
 
     val task2 = async(customDispatcher) {
-        heavyComputation(2)
+        heavyComputation(taskId = 2)
     }
 
     val task3 = async(customDispatcher) {
-        heavyComputation(3)
+        heavyComputation(taskId = 3)
     }
 
     print("Result: ${task1.await() + task2.await() + task3.await()}")

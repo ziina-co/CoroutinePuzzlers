@@ -1,39 +1,41 @@
 package `6_Flow`
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapMerge
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import utils.now
 import utils.passed
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
-/**
- * Flow 5
- */
-data class Item(val id: Int)
+fun Flow<Item>.timed(delay: Duration): Flow<Pair<Item, Duration>> = flow {
+    var time: Duration = Duration.ZERO
 
-fun itemFlow(): Flow<Item> = flow {
-    (1..5).forEach { id ->
-        emit(Item(id))
-        delay(50)
+    buffer(1, BufferOverflow.DROP_OLDEST).collect { item ->
+        if (time == Duration.ZERO) {
+            time = now()
+        }
+
+        emit(item to (time.passed))
+        delay(delay)
     }
 }
 
-@OptIn(FlowPreview::class)
-fun main() = runBlocking {
-    val time = now()
-    val result = mutableListOf<Item>()
-    itemFlow().flatMapMerge { item ->
-        flow {
-            withContext(Dispatchers.IO) {
-                delay(100)
-                emit(Item(item.id * 2))
-            }
+fun main(): Unit = runBlocking {
+    val sharedFlow = itemFlow().shareIn(this, SharingStarted.Eagerly, 0)
+    launch {
+        sharedFlow.collect {
+            print(it)
         }
-    }.collect { item ->
-        result.add(item)
     }
 
-    print("Result: $result")
-    print("Time taken: ${time.passed}")
+    launch {
+        sharedFlow
+            .timed(1000.milliseconds)
+            .collect {
+                print(it)
+            }
+    }
 }

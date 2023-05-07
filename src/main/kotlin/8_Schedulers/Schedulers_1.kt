@@ -18,8 +18,7 @@ private suspend fun heavyComputation(taskId: Int): Int {
 }
 
 fun main() = runBlocking {
-    val customDispatcher = 2.threadsScheduler
-
+    val customDispatcher = 1.threadsScheduler
     val time = now()
 
     val task1 = async(customDispatcher) {
