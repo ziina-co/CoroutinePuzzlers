@@ -10,32 +10,35 @@ import utils.passed
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-fun Flow<Item>.timed(delay: Duration): Flow<Pair<Item, Duration>> = flow {
+private fun stringFlow(): Flow<String> = flow {
+    ('A'..'E').forEach { char ->
+        emit("$char->")
+        delay(50)
+    }
+}
+fun Flow<String>.timed(delay: Duration): Flow<String> = flow {
     var time: Duration = Duration.ZERO
-
-    buffer(1, ).collect { item ->
+    buffer(1, BufferOverflow.DROP_OLDEST).collect { item ->
         if (time == Duration.ZERO) {
             time = now()
         }
-
-        emit(item to (time.passed))
+        emit("${time.passed} $item")
         delay(delay)
     }
 }
 
 fun main(): Unit = runBlocking {
-    val sharedFlow = itemFlow().shareIn(this, SharingStarted.Lazily, 0)
+    val sharedFlow = stringFlow().shareIn(this, SharingStarted.Lazily, 0)
     launch {
         sharedFlow.collect {
-            println(it)
+            print(it)
         }
     }
-
     launch {
         sharedFlow
             .timed(1000.milliseconds)
             .collect {
-                println(it)
+                print(it)
             }
     }
 }

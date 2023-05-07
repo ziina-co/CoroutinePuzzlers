@@ -12,24 +12,23 @@ import utils.passed
 /**
  * Flow 3
  */
-fun itemFlow(): Flow<Item> = flow {
-    (1..5).forEach { id ->
-        emit(Item(id))
+private fun stringFlow(): Flow<String> = flow {
+    ('A'..'E').forEach { char ->
+        emit("$char->")
         delay(1000)
     }
 }
 
 fun main() = runBlocking {
     val time = now()
-    val result = mutableListOf<Item>()
+    var result = ""
 
-    itemFlow().flowOn(Dispatchers.IO).map { item ->
+    stringFlow().flowOn(Dispatchers.IO).map { item ->
         delay(500)
-        Item(item.id)
+        item
     }.flowOn(Dispatchers.Default).collect { item ->
-        result.add(item)
+        result += item
     }
 
-    print("Result: $result")
-    print("Time taken: ${time.passed}")
+    print("Result: $result    ${time.passed}")
 }

@@ -11,8 +11,8 @@ import kotlinx.coroutines.runBlocking
  */
 suspend fun performRequest(request: Int): String {
     delay(100)
-    if (request == 2) throw RuntimeException("Error on request $request")
-    return "Result for request $request"
+    if (request == 2) throw RuntimeException("💥")
+    return "$request"
 }
 
 fun requestFlow() = flow {
@@ -24,6 +24,6 @@ fun requestFlow() = flow {
 fun main() = runBlocking {
     requestFlow()
         .map { request -> performRequest(request) }
-        .catch { e -> emit("Caught error: ${e.localizedMessage}") }
-        .collect { response -> println(response) }
+        .catch { e -> emit( e.localizedMessage) }
+        .collect { response -> print(response) }
 }

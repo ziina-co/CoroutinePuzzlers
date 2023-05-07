@@ -7,11 +7,9 @@ import kotlinx.coroutines.flow.flow
 import utils.now
 import utils.passed
 
-data class Item(val id: Int)
-
-fun itemFlow(): Flow<Item> = flow {
-    (1..5).forEach { id ->
-        emit(Item(id))
+private fun stringFlow(): Flow<String> = flow {
+    ('A'..'E').forEach { char ->
+        emit("$char->")
         delay(50)
     }
 }
@@ -19,18 +17,17 @@ fun itemFlow(): Flow<Item> = flow {
 @OptIn(FlowPreview::class)
 fun main() = runBlocking {
     val time = now()
-    val result = mutableListOf<Item>()
-    itemFlow().flatMapMerge { item ->
+    var result = ""
+    stringFlow().flatMapMerge { value ->
         flow {
             withContext(Dispatchers.IO) {
                 delay(100)
-                emit(Item(item.id * 2))
+                emit(value)
             }
         }
     }.collect { item ->
-        result.add(item)
+        result+=item
     }
 
-    print("Result: $result")
-    print("Time taken: ${time.passed}")
+    print(result + " ${time.passed}")
 }
