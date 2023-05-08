@@ -27,16 +27,14 @@ fun main() = runBlocking {
 }
 
 /*
-gitGraph
+ gitGraph
     commit id: "start"
     commit id: "launch child"
     branch child
-    checkout main
-    commit id: "delay 1000"
-    checkout child
     commit id: "print A" tag: "A" type:HIGHLIGHT
     commit id: "delay ♾️"
     checkout main
+    commit id: "delay 1000"
     commit id: "print C" tag: "C" type:HIGHLIGHT
     commit id: "supervisor.cancel()"
     commit id: "print D" tag: "D" type:HIGHLIGHT
@@ -45,5 +43,4 @@ gitGraph
     commit id: "print B" tag: "B" type:HIGHLIGHT
     checkout main
     commit id: "end"
-
  */
