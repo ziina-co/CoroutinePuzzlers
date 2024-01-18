@@ -6,13 +6,14 @@ import kotlinx.coroutines.runBlocking
 import utils.now
 import utils.passed
 import utils.threadsScheduler
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Schedulers 1
  */
 private suspend fun heavyComputation(taskId: Int): Int {
     print("Task $taskId started")
-    delay(1000L)
+    delay(1.seconds)
     print("Task $taskId completed")
     return taskId
 }
@@ -33,7 +34,7 @@ fun main() = runBlocking {
         heavyComputation(taskId = 3)
     }
 
-    println("Result: ${task1.await() + task2.await() + task3.await()}")
+    println("\nResult: ${task1.await() + task2.await() + task3.await()}")
 
     println("Total time: ${time.passed}")
 }

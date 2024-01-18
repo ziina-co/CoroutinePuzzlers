@@ -5,7 +5,6 @@ import kotlinx.coroutines.*
 /**
  * Exceptions 1
  */
-@OptIn(DelicateCoroutinesApi::class)
 fun main() = runBlocking {
     val exceptionHandler = CoroutineExceptionHandler { _, _ -> print("💥") }
 

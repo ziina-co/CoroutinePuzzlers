@@ -1,4 +1,4 @@
-package `6_Flow`
+package `5_Flow`
 
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
@@ -9,7 +9,9 @@ import utils.now
 import utils.passed
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
-
+/**
+ * Flow 5
+ */
 private fun stringFlow(): Flow<String> = flow {
     ('A'..'E').forEach { char ->
         emit("$char->")
