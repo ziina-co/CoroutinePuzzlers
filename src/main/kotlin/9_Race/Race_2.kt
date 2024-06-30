@@ -28,7 +28,7 @@ fun main() = runBlocking {
     val customDispatcher = 2.threadsScheduler
 
     repeat(1_000) {
-        synchronized(this) {
+        synchronized(this) { //👍👍👍👍👍
             jobs += launch(customDispatcher) {
                 repeat(1_000) {
                     increment()

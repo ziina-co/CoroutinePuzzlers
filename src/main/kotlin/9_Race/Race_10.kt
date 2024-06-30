@@ -37,7 +37,6 @@ fun main() = runBlocking {
         joinAll(*jobs.toTypedArray())
     }
     print("Final count: ${counter.pretty}")
-
 }
 
 /* options

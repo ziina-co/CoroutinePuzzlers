@@ -24,7 +24,7 @@ fun main() = runBlocking {
     val result1 = deferred1.await()
     val result2 = deferred2.await()
 
-    print("$result1 $result2 ${(time.passed)}")
+    print("$result1 $result2 ${time.passed}")
 }
 
 /*
